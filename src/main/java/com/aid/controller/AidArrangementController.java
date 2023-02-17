@@ -6,11 +6,13 @@ import com.aid.entity.AidArrangementDO;
 import com.aid.entity.AidRecordDO;
 import com.aid.mapper.AidArrangementMapper;
 import com.aid.mapper.AidRecordMapper;
+import com.aid.param.AidArrangementParam;
 import com.aid.transfer.AidRecordTransfer;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Lists;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import com.aid.service.AidArrangementService;
@@ -36,13 +38,15 @@ public class AidArrangementController extends ApiController {
      */
     @Resource
     private AidArrangementMapper aidArrangementService;
+    @Resource
+    private AidArrangementTransfer aidArrangementTransfer;
 
     /**
      * 分页查询所有数据
      * @return 所有数据
      */
     @PostMapping("/selectPage")
-    public Response<ResponseList<AidArrangementDTO>> selectAll(@RequestBody Request<AidArrangementDTO> aidArrangement) {
+    public Response<ResponseList<AidArrangementDTO>> selectAll(@RequestBody Request<AidArrangementParam> aidArrangement) {
         ResponseList<AidArrangementDTO> aidArrangementResponseList = new ResponseList<>();
         if (Objects.isNull(aidArrangement) || Objects.isNull(aidArrangement.getModel())) {
             return Response.successResponse(aidArrangementResponseList);
@@ -59,10 +63,7 @@ public class AidArrangementController extends ApiController {
             return Response.successResponse(aidArrangementResponseList);
         }
 
-        aidArrangementResponseList.setContent(result.getRecords()
-                .stream()
-                .map(AidArrangementTransfer::transferDoToDto)
-                .collect(Collectors.toList()));
+        aidArrangementResponseList.setContent(aidArrangementTransfer.transferDoToDto(result.getRecords()));
         aidArrangementResponseList.setPage(result.getCurrent());
         aidArrangementResponseList.setSize(result.getSize());
         aidArrangementResponseList.setTotal(result.getTotal());
@@ -78,29 +79,27 @@ public class AidArrangementController extends ApiController {
      */
     @GetMapping("{id}")
     public Response<AidArrangementDTO> selectOne(@PathVariable Serializable id) {
-        return Response.successResponse(AidArrangementTransfer.transferDoToDto(this.aidArrangementService.selectById(id)));
+        return Response.successResponse(aidArrangementTransfer.transferDoToDto(Lists.newArrayList(this.aidArrangementService.selectById(id))).get(0));
     }
 
     /**
      * 新增数据
      *
-     * @param aidArrangementDTO 实体对象
      * @return 新增结果
      */
     @PostMapping("/add")
-    public Response<Boolean> insert(@RequestBody AidArrangementDTO aidArrangementDTO) {
-        return Response.successResponse(this.aidArrangementService.insert(AidArrangementTransfer.transferDtoToDo(aidArrangementDTO)));
+    public Response<Boolean> insert(@RequestBody AidArrangementParam aidArrangementparam) {
+        return Response.successResponse(this.aidArrangementService.insert(AidArrangementTransfer.transferParamToDo(aidArrangementparam)));
     }
 
     /**
      * 修改数据
      *
-     * @param aidArrangementDTO 实体对象
      * @return 修改结果
      */
     @PostMapping("/update")
-    public Response<Boolean> update(@RequestBody AidArrangementDTO aidArrangementDTO) {
-        return Response.successResponse(this.aidArrangementService.updateById(AidArrangementTransfer.transferDtoToDo(aidArrangementDTO)));
+    public Response<Boolean> update(@RequestBody AidArrangementParam aidArrangementparam) {
+        return Response.successResponse(this.aidArrangementService.updateById(AidArrangementTransfer.transferParamToDo(aidArrangementparam)));
     }
 
     /**

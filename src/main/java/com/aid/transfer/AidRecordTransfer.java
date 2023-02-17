@@ -1,34 +1,55 @@
 package com.aid.transfer;
 
 import com.aid.dto.AidRecordDTO;
+import com.aid.dto.UserDTO;
 import com.aid.entity.AidRecordDO;
+import com.aid.manager.UserManager;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.Objects;
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author: 裴冲
  * @DateTime: 2023/2/15 10:48
  * @Description:
  */
+@Component
 public class AidRecordTransfer {
+    @Resource
+    private UserManager userManager;
 
 
-    public static AidRecordDTO transferDoToDto(AidRecordDO aidRecordDO){
-        AidRecordDTO aidRecordDTO = new AidRecordDTO();
-        if (Objects.isNull(aidRecordDO)){
-            return aidRecordDTO;
+    public List<AidRecordDTO> transferDoToDto(List<AidRecordDO> aidRecordDOs) {
+        if (CollectionUtils.isEmpty(aidRecordDOs)) {
+            return Collections.emptyList();
         }
 
-        BeanUtils.copyProperties(aidRecordDO, aidRecordDTO);
-        return aidRecordDTO;
+        List<Long> ids = aidRecordDOs.stream()
+                .map(AidRecordDO::getOperatorId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+
+        Map<Long, UserDTO> userMap = userManager.getUserMap(ids);
+
+        return aidRecordDOs.stream()
+                .map(i -> {
+                    AidRecordDTO aidRecordDTO = new AidRecordDTO();
+                    BeanUtils.copyProperties(i, aidRecordDTO);
+                    aidRecordDTO.setOperator(userMap.get(i.getOperatorId()));
+                    return aidRecordDTO;
+                }).collect(Collectors.toList());
+
     }
 
 
-    public static AidRecordDO transferDtoToDo(AidRecordDTO aidRecordDTO){
+    public static AidRecordDO transferDtoToDo(AidRecordDTO aidRecordDTO) {
         AidRecordDO aidRecordDO = new AidRecordDO();
-        if (Objects.isNull(aidRecordDTO)){
+        if (Objects.isNull(aidRecordDTO)) {
             return aidRecordDO;
         }
 

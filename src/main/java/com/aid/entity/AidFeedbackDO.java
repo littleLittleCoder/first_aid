@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -45,7 +46,7 @@ public class AidFeedbackDO {
     //紧急措施
     private String emergencyMeasures;
     //费用
-    private Object coastAmount;
+    private BigDecimal coastAmount;
 
     private Date createdDate;
 

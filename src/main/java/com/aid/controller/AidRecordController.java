@@ -9,6 +9,7 @@ import com.aid.dto.AidRecordDTO;
 import com.aid.dto.Request;
 import com.aid.dto.Response;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Lists;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import com.aid.transfer.AidRecordTransfer;
@@ -34,6 +35,9 @@ public class AidRecordController {
     @Resource
     private AidRecordMapper AidRecordMapper;
 
+    @Resource
+    private AidRecordTransfer aidRecordTransfer;
+
     /**
      * 分页查询所有数据
      *
@@ -58,10 +62,7 @@ public class AidRecordController {
             return Response.successResponse(aidRecordResponseList);
         }
 
-        aidRecordResponseList.setContent(result.getRecords()
-                .stream()
-                .map(AidRecordTransfer::transferDoToDto)
-                .collect(Collectors.toList()));
+        aidRecordResponseList.setContent(aidRecordTransfer.transferDoToDto(result.getRecords()));
         aidRecordResponseList.setPage(result.getCurrent());
         aidRecordResponseList.setSize(result.getSize());
         aidRecordResponseList.setTotal(result.getTotal());
@@ -77,7 +78,10 @@ public class AidRecordController {
      */
     @GetMapping("{id}")
     public Response<AidRecordDTO> selectOne(@PathVariable Serializable id) {
-        return Response.successResponse(AidRecordTransfer.transferDoToDto(this.AidRecordMapper.selectById(id)));
+        if (id == null) {
+            return Response.errorResponse("参数为空");
+        }
+        return Response.successResponse(aidRecordTransfer.transferDoToDto(Lists.newArrayList(this.AidRecordMapper.selectById(id))).get(0));
     }
 
     /**

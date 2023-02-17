@@ -20,19 +20,33 @@ import java.util.Date;
 public class AidArrangementDO {
 
     private Long id;
-    //救援记录表id
+    /**
+     * 救援记录表id
+     */
     private Long recordId;
-    //调度员id
+    /**
+     * 调度员id
+     */
     private Long yardmanId;
-    //救护车类型
+    /**
+     * 救护车类型
+     */
     private Integer ambulanceType;
-    //救护车牌号
+    /**
+     * 救护车牌号
+     */
     private String ambulanceNo;
-    //出发时间
+    /**
+     * 出发时间
+     */
     private Date departDate;
-    //随行护士集合
+    /**
+     * 随行护士集合
+     */
     private String nurseIds;
-    //携带设备
+    /**
+     * 携带设备
+     */
     private String equipment;
 
     private Date createdDate;

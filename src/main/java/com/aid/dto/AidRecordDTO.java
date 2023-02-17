@@ -30,7 +30,7 @@ public class AidRecordDTO extends RequestList {
     //病因
     private String patientPathogen;
     //接线员id
-    private Long operatorId;
+    private UserDTO operator;
 
     private Date createdDate;
 

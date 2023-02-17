@@ -1,5 +1,6 @@
 package com.aid.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -37,7 +38,7 @@ public class AidFeedbackDTO extends RequestList {
     //紧急措施
     private String emergencyMeasures;
     //费用
-    private Object coastAmount;
+    private BigDecimal coastAmount;
 
     private Date createdDate;
 

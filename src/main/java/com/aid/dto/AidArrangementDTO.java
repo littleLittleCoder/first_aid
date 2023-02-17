@@ -1,6 +1,7 @@
 package com.aid.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class AidArrangementDTO extends RequestList {
     //救援记录表id
     private Long recordId;
     //调度员id
-    private Long yardmanId;
+    private UserDTO yardmanUser;
     //救护车类型
     private Integer ambulanceType;
     //救护车牌号
@@ -29,7 +30,7 @@ public class AidArrangementDTO extends RequestList {
     //出发时间
     private Date departDate;
     //随行护士集合
-    private String nurseIds;
+    private List<UserDTO> nurseUsers;
     //携带设备
     private String equipment;
 
