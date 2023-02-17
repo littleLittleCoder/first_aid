@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AidArrangementDTO {
+public class AidArrangementDTO extends RequestList {
 
     private Long id;
     //救援记录表id

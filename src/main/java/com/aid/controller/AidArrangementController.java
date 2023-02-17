@@ -1,9 +1,17 @@
 package com.aid.controller;
 
 
+import com.aid.dto.*;
+import com.aid.entity.AidArrangementDO;
+import com.aid.entity.AidRecordDO;
+import com.aid.mapper.AidArrangementMapper;
+import com.aid.mapper.AidRecordMapper;
+import com.aid.transfer.AidRecordTransfer;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.ApiController;
-import com.aid.dto.AidArrangementDTO;
-import com.aid.dto.Response;
+import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import com.aid.service.AidArrangementService;
 import com.aid.transfer.AidArrangementTransfer;
@@ -11,6 +19,8 @@ import com.aid.transfer.AidArrangementTransfer;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 救援安排表(AidArrangement)表控制层
@@ -25,19 +35,40 @@ public class AidArrangementController extends ApiController {
      * 服务对象
      */
     @Resource
-    private AidArrangementService aidArrangementService;
+    private AidArrangementMapper aidArrangementService;
 
     /**
      * 分页查询所有数据
-     *
-     * @param page           分页对象
-     * @param aidArrangementDTO 查询实体
      * @return 所有数据
      */
-//    @GetMapping("/selectAll")
-//    public R selectAll(Page<AidArrangementDTO> page, AidArrangementDTO aidArrangementDTO) {
-//        return success(this.aidArrangementService.page(page, new QueryWrapper<>(aidArrangementDTO)));
-//    }
+    @PostMapping("/selectPage")
+    public Response<ResponseList<AidArrangementDTO>> selectAll(@RequestBody Request<AidArrangementDTO> aidArrangement) {
+        ResponseList<AidArrangementDTO> aidArrangementResponseList = new ResponseList<>();
+        if (Objects.isNull(aidArrangement) || Objects.isNull(aidArrangement.getModel())) {
+            return Response.successResponse(aidArrangementResponseList);
+        }
+
+        Page<AidArrangementDO> aidArrangementPage = new Page<>();
+        aidArrangementPage.setCurrent(aidArrangement.getModel().getPage());
+        aidArrangementPage.setSize(aidArrangement.getModel().getSize());
+
+        QueryWrapper<AidArrangementDO> wrapper = new QueryWrapper<>();
+        Page<AidArrangementDO> result = aidArrangementService.selectPage(aidArrangementPage, wrapper);
+
+        if (Objects.isNull(result) || CollectionUtils.isEmpty(result.getRecords())) {
+            return Response.successResponse(aidArrangementResponseList);
+        }
+
+        aidArrangementResponseList.setContent(result.getRecords()
+                .stream()
+                .map(AidArrangementTransfer::transferDoToDto)
+                .collect(Collectors.toList()));
+        aidArrangementResponseList.setPage(result.getCurrent());
+        aidArrangementResponseList.setSize(result.getSize());
+        aidArrangementResponseList.setTotal(result.getTotal());
+
+        return Response.successResponse(aidArrangementResponseList);
+    }
 
     /**
      * 通过主键查询单条数据
@@ -47,7 +78,7 @@ public class AidArrangementController extends ApiController {
      */
     @GetMapping("{id}")
     public Response<AidArrangementDTO> selectOne(@PathVariable Serializable id) {
-        return Response.successResponse(AidArrangementTransfer.transferDoToDto(this.aidArrangementService.getById(id)));
+        return Response.successResponse(AidArrangementTransfer.transferDoToDto(this.aidArrangementService.selectById(id)));
     }
 
     /**
@@ -58,7 +89,7 @@ public class AidArrangementController extends ApiController {
      */
     @PostMapping("/add")
     public Response<Boolean> insert(@RequestBody AidArrangementDTO aidArrangementDTO) {
-        return Response.successResponse(this.aidArrangementService.save(AidArrangementTransfer.transferDtoToDo(aidArrangementDTO)));
+        return Response.successResponse(this.aidArrangementService.insert(AidArrangementTransfer.transferDtoToDo(aidArrangementDTO)));
     }
 
     /**
@@ -80,7 +111,7 @@ public class AidArrangementController extends ApiController {
      */
     @PostMapping
     public Response<Boolean> delete(@RequestParam("/delete") List<Long> idList) {
-        return Response.successResponse(this.aidArrangementService.removeByIds(idList));
+        return Response.successResponse(this.aidArrangementService.deleteBatchIds(idList));
     }
 }
 

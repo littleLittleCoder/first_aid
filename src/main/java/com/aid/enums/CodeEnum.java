@@ -11,6 +11,9 @@ import java.util.List;
  * @Description:
  */
 public enum CodeEnum {
+    /**
+     *
+     */
     SUCCESS("SUCCESS", "调用成功"),
     SYSTEM_ERROR("FAIL_BIZ_GLOBAL_SYSTEM_ERROR", "系统错误"),
     APPLICATION_ERROR("FAIL_BIZ_GLOBAL_APPLICATION_ERROR", "应用错误"),

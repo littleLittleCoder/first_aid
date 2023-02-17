@@ -1,16 +1,20 @@
 package com.aid.controller;
 
 
-import com.baomidou.mybatisplus.extension.api.ApiController;
-import com.aid.dto.AidFeedbackDTO;
-import com.aid.dto.Response;
+import com.aid.dto.*;
+import com.aid.entity.AidFeedbackDO;
+import com.aid.mapper.AidFeedbackMapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import com.aid.service.AidFeedbackService;
 import com.aid.transfer.AidFeedbackTransfer;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * (AidFeedback)表控制层
@@ -20,24 +24,45 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("aidFeedback")
-public class AidFeedbackController extends ApiController {
+public class AidFeedbackController {
     /**
      * 服务对象
      */
     @Resource
-    private AidFeedbackService aidFeedbackService;
+    private AidFeedbackMapper aidFeedbackMapper;
 
     /**
      * 分页查询所有数据
-     *
-     * @param page        分页对象
-     * @param aidFeedbackDTO 查询实体
      * @return 所有数据
      */
-//    @GetMapping
-//    public R selectAll(Page<AidFeedbackDTO> page, AidFeedbackDTO aidFeedbackDTO) {
-//        return success(this.aidFeedbackService.page(page, new QueryWrapper<>(aidFeedbackDTO)));
-//    }
+    @PostMapping("selectPage")
+    public Response<ResponseList<AidFeedbackDTO>> selectAll(Request<AidFeedbackDTO> aidFeedback) {
+        ResponseList<AidFeedbackDTO> aidRecordResponseList = new ResponseList<>();
+        if (Objects.isNull(aidFeedback) || Objects.isNull(aidFeedback.getModel())) {
+            return Response.successResponse(aidRecordResponseList);
+        }
+
+        Page<AidFeedbackDO> aidFeedbackPage = new Page<>();
+        aidFeedbackPage.setCurrent(aidFeedback.getModel().getPage());
+        aidFeedbackPage.setSize(aidFeedback.getModel().getSize());
+
+        QueryWrapper<AidFeedbackDO> wrapper = new QueryWrapper<>();
+        Page<AidFeedbackDO> result = aidFeedbackMapper.selectPage(aidFeedbackPage, wrapper);
+
+        if (Objects.isNull(result) || CollectionUtils.isEmpty(result.getRecords())) {
+            return Response.successResponse(aidRecordResponseList);
+        }
+
+        aidRecordResponseList.setContent(result.getRecords()
+                .stream()
+                .map(AidFeedbackTransfer::transferDoToDto)
+                .collect(Collectors.toList()));
+        aidRecordResponseList.setPage(result.getCurrent());
+        aidRecordResponseList.setSize(result.getSize());
+        aidRecordResponseList.setTotal(result.getTotal());
+
+        return Response.successResponse(aidRecordResponseList);
+    }
 
     /**
      * 通过主键查询单条数据
@@ -47,7 +72,7 @@ public class AidFeedbackController extends ApiController {
      */
     @GetMapping("{id}")
     public Response<AidFeedbackDTO> selectOne(@PathVariable Serializable id) {
-        return Response.successResponse(AidFeedbackTransfer.transferDoToDto(this.aidFeedbackService.getById(id)));
+        return Response.successResponse(AidFeedbackTransfer.transferDoToDto(this.aidFeedbackMapper.selectById(id)));
     }
 
     /**
@@ -58,7 +83,7 @@ public class AidFeedbackController extends ApiController {
      */
     @PostMapping
     public Response<Boolean> insert(@RequestBody AidFeedbackDTO aidFeedbackDTO) {
-        return Response.successResponse(this.aidFeedbackService.save(AidFeedbackTransfer.transferDtoToDo(aidFeedbackDTO)));
+        return Response.successResponse(this.aidFeedbackMapper.insert(AidFeedbackTransfer.transferDtoToDo(aidFeedbackDTO)));
     }
 
     /**
@@ -69,7 +94,7 @@ public class AidFeedbackController extends ApiController {
      */
     @PutMapping
     public Response<Boolean> update(@RequestBody AidFeedbackDTO aidFeedbackDTO) {
-        return Response.successResponse(this.aidFeedbackService.updateById(AidFeedbackTransfer.transferDtoToDo(aidFeedbackDTO)));
+        return Response.successResponse(this.aidFeedbackMapper.updateById(AidFeedbackTransfer.transferDtoToDo(aidFeedbackDTO)));
     }
 
     /**
@@ -80,7 +105,7 @@ public class AidFeedbackController extends ApiController {
      */
     @DeleteMapping
     public Response<Boolean> delete(@RequestParam("idList") List<Long> idList) {
-        return Response.successResponse(this.aidFeedbackService.removeByIds(idList));
+        return Response.successResponse(this.aidFeedbackMapper.deleteBatchIds(idList));
     }
 }
 

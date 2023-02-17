@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
  * @since 2023-02-14 13:54:16
  */
 @SuppressWarnings("serial")
-public class AidFeedbackDTO extends Model<AidFeedbackDTO> {
+public class AidFeedbackDTO extends RequestList {
 
     private Long id;
     //记录id
