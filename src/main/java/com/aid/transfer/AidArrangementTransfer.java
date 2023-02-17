@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.google.common.collect.Lists;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.NumberUtils;
 
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  * @DateTime: 2023/2/15 11:32
  * @Description:
  */
+@Component
 public class AidArrangementTransfer {
     @Resource
     private UserManager userManager;
