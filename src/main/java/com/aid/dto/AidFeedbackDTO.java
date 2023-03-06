@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * (AidFeedback)表实体类
@@ -11,35 +17,50 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
  * @author makejava
  * @since 2023-02-14 13:54:16
  */
-@SuppressWarnings("serial")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ApiModel(value = "AidFeedbackDTO", description = "分页查询条件")
 public class AidFeedbackDTO extends RequestList {
 
     private Long id;
-    //记录id
+    @ApiModelProperty("记录id")
     private Long recordId;
-    //医院名称
+    //
+    @ApiModelProperty("医院名称")
     private String hospitalName;
-    //医院地址
+    //
+    @ApiModelProperty("医院地址")
     private String hospitalAddress;
-    //送达医院时间
+    //
+    @ApiModelProperty("送达医院时间")
     private Date hospitalArriveDate;
-    //病发地址
+    //
+    @ApiModelProperty("病发地址")
     private String diseaseAddress;
-    //病人姓名
+    //
+    @ApiModelProperty("病人姓名")
     private String patientName;
-    //病人性别
+    //
+    @ApiModelProperty("病人性别")
     private Integer patientSex;
-    //病人年龄
+    //
+    @ApiModelProperty("病人年龄")
     private Integer patientAge;
-    //病人症状
+    //
+    @ApiModelProperty("病人症状")
     private String patientSymptom;
-    //病人病史
+    //
+    @ApiModelProperty("病人病史")
     private String patientMedicalHistory;
-    //紧急措施
+    //
+    @ApiModelProperty("紧急措施")
     private String emergencyMeasures;
-    //费用
+    //
+    @ApiModelProperty("费用")
     private BigDecimal coastAmount;
 
+    @ApiModelProperty("创建时间")
     private Date createdDate;
 
 }

@@ -1,6 +1,13 @@
 package com.aid.param;
 
 import com.aid.dto.RequestList;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
@@ -9,21 +16,25 @@ import java.util.Date;
  * @DateTime: 2023/2/17 16:18
  * @Description:
  */
+@ApiModel(value = "AidArrangementParam", description = "分页查询条件")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AidArrangementParam extends RequestList {
 
     private Long id;
-    //救援记录表id
+    @ApiModelProperty("救援记录表id")
     private Long recordId;
-    //调度员id
+    @ApiModelProperty("调度员id")
     private Long yardmanId;
-    //救护车类型
+    @ApiModelProperty("救护车类型")
     private Integer ambulanceType;
-    //救护车牌号
+    @ApiModelProperty("救护车牌号")
     private String ambulanceNo;
-    //出发时间
+    @ApiModelProperty("出发时间")
     private Date departDate;
-    //随行护士集合
+    @ApiModelProperty("随行护士集合")
     private String nurseIds;
-    //携带设备
+    @ApiModelProperty("携带设备")
     private String equipment;
 }

@@ -3,6 +3,8 @@ package com.aid.dto;
 import java.util.Date;
 import java.util.List;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,24 +18,33 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(value = "AidArrangementDTO", description = "分页查询条件")
 public class AidArrangementDTO extends RequestList {
 
     private Long id;
-    //救援记录表id
+    //
+    @ApiModelProperty("救援记录表id")
     private Long recordId;
-    //调度员id
+    //
+    @ApiModelProperty("调度员id")
     private UserDTO yardmanUser;
-    //救护车类型
+    //
+    @ApiModelProperty("救护车类型")
     private Integer ambulanceType;
-    //救护车牌号
+    //
+    @ApiModelProperty("救护车牌号")
     private String ambulanceNo;
-    //出发时间
+    //
+    @ApiModelProperty("出发时间")
     private Date departDate;
-    //随行护士集合
+    //
+    @ApiModelProperty("随行护士集合")
     private List<UserDTO> nurseUsers;
-    //携带设备
+    //
+    @ApiModelProperty("携带设备")
     private String equipment;
 
+    @ApiModelProperty("创建时间")
     private Date createdDate;
 
 

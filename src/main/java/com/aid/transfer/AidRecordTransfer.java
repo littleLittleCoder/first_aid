@@ -1,6 +1,7 @@
 package com.aid.transfer;
 
 import com.aid.dto.AidRecordDTO;
+import com.aid.dto.AidRecordParam;
 import com.aid.dto.UserDTO;
 import com.aid.entity.AidRecordDO;
 import com.aid.manager.UserManager;
@@ -47,13 +48,13 @@ public class AidRecordTransfer {
     }
 
 
-    public static AidRecordDO transferDtoToDo(AidRecordDTO aidRecordDTO) {
+    public static AidRecordDO transferDtoToDo(AidRecordParam param) {
         AidRecordDO aidRecordDO = new AidRecordDO();
-        if (Objects.isNull(aidRecordDTO)) {
+        if (Objects.isNull(param)) {
             return aidRecordDO;
         }
 
-        BeanUtils.copyProperties(aidRecordDTO, aidRecordDO);
+        BeanUtils.copyProperties(param, aidRecordDO);
         aidRecordDO.setIsActive(true);
         aidRecordDO.setCreatedDate(new Date());
         return aidRecordDO;

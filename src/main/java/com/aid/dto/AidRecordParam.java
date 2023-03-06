@@ -1,6 +1,5 @@
 package com.aid.dto;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -10,17 +9,15 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * (AidRecord)表实体类
- *
- * @author makejava
- * @since 2023-02-14 13:54:17
+ * @Author: 裴冲
+ * @DateTime: 2023/3/6 14:54
+ * @Description:
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "AidRecordDTO", description = "分页查询条件")
-public class AidRecordDTO  {
-
+@ApiModel(value = "AidRecordParam", description = "保存条件")
+public class AidRecordParam extends RequestList{
     private Long id;
     //病人名称
     @ApiModelProperty("病人名称")
@@ -39,12 +36,10 @@ public class AidRecordDTO  {
     private String patientPathogen;
     //
     @ApiModelProperty("接线员id")
-    private UserDTO operator;
+    private Long operatorId;
 
     @ApiModelProperty("创建时间")
     private Date createdDate;
 
     private Boolean isActive;
-
 }
-
