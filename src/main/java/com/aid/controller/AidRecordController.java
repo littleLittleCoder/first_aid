@@ -47,6 +47,7 @@ public class AidRecordController {
      * @param aidRecord 查询实体
      * @return 所有数据
      */
+    @CrossOrigin
     @ApiOperation(value = "分页查询", notes = "分页查询", response = AidRecordDTO.class,responseContainer = "List")
     @ApiImplicitParam(name = "request", value = "分页查询", required = true,
             paramType = "body", dataType = "Request«AidRecordParam»")
@@ -81,6 +82,7 @@ public class AidRecordController {
      *
      * @return 单条数据
      */
+    @CrossOrigin
     @ApiOperation(value = "根据id查询", notes = "根据id查询", response = AidRecordDTO.class)
     @ApiImplicitParam(name = "request", value = "分页查询", required = true,
             paramType = "body", dataType = "Request«Long»")
@@ -98,6 +100,7 @@ public class AidRecordController {
      * @param aidRecordDTO 实体对象
      * @return 新增结果
      */
+    @CrossOrigin
     @ApiOperation(value = "新增", notes = "新增", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "新增", required = true,
             paramType = "body", dataType = "Request«AidRecordParam»")
@@ -111,6 +114,7 @@ public class AidRecordController {
      *
      * @return 修改结果
      */
+    @CrossOrigin
     @ApiOperation(value = "更新", notes = "更新", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "更新", required = true,
             paramType = "body", dataType = "Request«AidRecordParam»")
@@ -124,6 +128,7 @@ public class AidRecordController {
      *
      * @return 删除结果
      */
+    @CrossOrigin
     @ApiOperation(value = "删除结果", notes = "删除结果", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "删除结果", required = true,
             paramType = "body", dataType = "Request«List<Long>»")
