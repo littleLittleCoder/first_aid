@@ -88,6 +88,7 @@ public class AidRecordController {
     @ApiImplicitParam(name = "request", value = "分页查询", required = true,
             paramType = "body", dataType = "Request«Long»")
     @RequestMapping(value = "/selectOne", method = RequestMethod.POST)
+    @CrossOrigin(origins = "*")
     public Response<AidRecordDTO> selectOne(@RequestBody Request<Long> param) {
         if (param == null) {
             return Response.errorResponse("参数为空");
