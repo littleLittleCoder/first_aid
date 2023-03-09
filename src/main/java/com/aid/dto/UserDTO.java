@@ -22,8 +22,6 @@ public class UserDTO {
 
     private Integer age;
 
-    private String sexId;
-
-    private String sexName;
+    private String sex;
 
 }

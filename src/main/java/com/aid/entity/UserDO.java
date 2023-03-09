@@ -1,6 +1,8 @@
 package com.aid.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @TableName("user")
+@ApiModel(value = "UserDO", description = "用户信息")
 public class UserDO {
 
     private Long id;
@@ -25,6 +28,8 @@ public class UserDO {
 
     private Integer age;
 
-    private Integer sex;
+    private String sex;
+
+    private Boolean isActive;
 
 }
