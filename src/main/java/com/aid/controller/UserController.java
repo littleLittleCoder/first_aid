@@ -105,10 +105,10 @@ public class UserController {
 
 
     @ApiOperation(value = "添加用户", notes = "添加用户", response = Boolean.class)
-    @ApiImplicitParam(name = "request", value = "重置密码", required = true,
+    @ApiImplicitParam(name = "request", value = "添加用户", required = true,
             paramType = "body", dataType = "Request«Boolean»")
-    @RequestMapping(value = "/reset/password", method = RequestMethod.POST)
-    public Response<Boolean> reset(@RequestBody Request<UserDO> param) {
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public Response<Boolean> insert(@RequestBody Request<UserDO> param) {
         if (param == null || param.getModel() == null) {
             return Response.errorResponse("参数为空");
         }
