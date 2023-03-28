@@ -62,11 +62,13 @@ public class AidArrangementController extends ApiController {
             return Response.successResponse(aidArrangementResponseList);
         }
 
+        AidArrangementParam model = aidArrangement.getModel();
         Page<AidArrangementDO> aidArrangementPage = new Page<>();
-        aidArrangementPage.setCurrent(aidArrangement.getModel().getPage());
-        aidArrangementPage.setSize(aidArrangement.getModel().getSize());
+        aidArrangementPage.setCurrent(model.getPage());
+        aidArrangementPage.setSize(model.getSize());
 
         QueryWrapper<AidArrangementDO> wrapper = new QueryWrapper<>();
+
         Page<AidArrangementDO> result = aidArrangementService.selectPage(aidArrangementPage, wrapper);
 
         if (Objects.isNull(result) || CollectionUtils.isEmpty(result.getRecords())) {

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: 裴冲
@@ -34,7 +35,7 @@ public class AidArrangementParam extends RequestList {
     @ApiModelProperty("出发时间")
     private Date departDate;
     @ApiModelProperty("随行护士集合")
-    private String nurseIds;
+    private List<Long> nurseIds;
     @ApiModelProperty("携带设备")
     private String equipment;
 }

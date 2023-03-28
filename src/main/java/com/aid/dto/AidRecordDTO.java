@@ -30,7 +30,7 @@ public class AidRecordDTO  {
     private String patientAddress;
     //
     @ApiModelProperty("病人电话")
-    private Integer patientPhone;
+    private Long patientPhone;
     //
     @ApiModelProperty("病情")
     private String patientCondition;

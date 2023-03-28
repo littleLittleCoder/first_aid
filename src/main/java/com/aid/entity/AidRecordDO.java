@@ -28,7 +28,7 @@ public class AidRecordDO {
     //病发地点
     private String patientAddress;
     //病人电话
-    private Integer patientPhone;
+    private Long patientPhone;
     //病情
     private String patientCondition;
     //病因

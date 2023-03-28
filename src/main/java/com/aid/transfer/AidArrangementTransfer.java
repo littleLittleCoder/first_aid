@@ -75,6 +75,7 @@ public class AidArrangementTransfer {
         }
 
         BeanUtils.copyProperties(aidArrangementParam, aidArrangementDO);
+        aidArrangementDO.setNurseIds(JSON.toJSONString(aidArrangementParam.getNurseIds()));
         aidArrangementDO.setIsActive(true);
         aidArrangementDO.setCreatedDate(new Date());
         return aidArrangementDO;

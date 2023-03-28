@@ -1,5 +1,6 @@
 package com.aid.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.aid.dto.*;
 import com.aid.entity.AidRecordDO;
 import com.aid.entity.UserDO;
@@ -13,6 +14,8 @@ import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,4 +47,72 @@ public class UserController {
                 .eq(UserDO::getIsActive, 1);
         return Response.successResponse(userMapper.selectList(wrapper));
     }
+
+
+    @ApiOperation(value = "登录并获取身份", notes = "登录并获取身份", response = LoginResDTO.class)
+    @ApiImplicitParam(name = "request", value = "登录并获取身份", required = true,
+            paramType = "body", dataType = "Request«LoginResDTO»")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Response<LoginResDTO> login(@RequestBody Request<LoginParam> param) {
+
+        if (param == null
+                || BeanUtil.isEmpty(param.getModel())
+                || StringUtils.isBlank(param.getModel().getPhone())) {
+            return Response.errorResponse("请填写账号");
+        }
+        QueryWrapper<UserDO> wrapper = new QueryWrapper<>();
+        wrapper.lambda()
+                .eq(UserDO::getIsActive, 1)
+                .eq(UserDO::getPhone, param.getModel().getPhone());
+        UserDO userDO = userMapper.selectOne(wrapper);
+
+        if (BeanUtil.isEmpty(userDO)) {
+            return Response.errorResponse("该账号不错在");
+        }
+
+        if (!Objects.equals(param.getModel().getPassWorld(), userDO.getPassWorld())) {
+            return Response.errorResponse("账号密码错误");
+        }
+
+        return Response.successResponse(LoginResDTO.builder().loginResult(true).user(userDO).build());
+    }
+
+    @ApiOperation(value = "重置密码", notes = "重置密码", response = Boolean.class)
+    @ApiImplicitParam(name = "request", value = "重置密码", required = true,
+            paramType = "body", dataType = "Request«Boolean»")
+    @RequestMapping(value = "/reset/password", method = RequestMethod.POST)
+    public Response<Boolean> reset(@RequestBody Request<String> param) {
+        if (param == null
+                || StringUtils.isBlank(param.getModel())) {
+            return Response.errorResponse("请填写账号");
+        }
+
+        QueryWrapper<UserDO> wrapper = new QueryWrapper<>();
+        wrapper.lambda()
+                .eq(UserDO::getIsActive, 1)
+                .eq(UserDO::getPhone, param.getModel());
+        UserDO userDO = userMapper.selectOne(wrapper);
+
+        if (BeanUtil.isEmpty(userDO)) {
+            return Response.errorResponse("该账号不错在");
+        }
+
+        userDO.setPassWorld("123456");
+        int i = userMapper.updateById(userDO);
+        return Response.successResponse(i > 0);
+
+    }
+
+
+    @ApiOperation(value = "添加用户", notes = "添加用户", response = Boolean.class)
+    @ApiImplicitParam(name = "request", value = "重置密码", required = true,
+            paramType = "body", dataType = "Request«Boolean»")
+    @RequestMapping(value = "/reset/password", method = RequestMethod.POST)
+    public Response<Boolean> reset(@RequestBody Request<UserDO> param) {
+        if (param == null || param.getModel() == null) {
+            return Response.errorResponse("参数为空");
+        }
+        return Response.successResponse(userMapper.insert(param.getModel()) > 0);
+    }
+
 }

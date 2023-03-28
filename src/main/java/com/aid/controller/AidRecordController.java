@@ -7,6 +7,7 @@ import com.aid.mapper.AidRecordMapper;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
@@ -49,7 +50,7 @@ public class AidRecordController {
      * @return 所有数据
      */
 
-    @ApiOperation(value = "分页查询", notes = "分页查询", response = AidRecordDTO.class,responseContainer = "List")
+    @ApiOperation(value = "分页查询", notes = "分页查询", response = AidRecordDTO.class, responseContainer = "List")
     @ApiImplicitParam(name = "request", value = "分页查询", required = true,
             paramType = "body", dataType = "Request«AidRecordParam»")
     @RequestMapping(value = "/selectPage", method = RequestMethod.POST)
@@ -60,10 +61,15 @@ public class AidRecordController {
         }
 
         Page<AidRecordDO> aidRecordPage = new Page<>();
+        AidRecordParam model = aidRecord.getModel();
         aidRecordPage.setCurrent(aidRecord.getModel().getPage());
         aidRecordPage.setSize(aidRecord.getModel().getSize());
 
         QueryWrapper<AidRecordDO> wrapper = new QueryWrapper<>();
+        wrapper.lambda()
+                .eq(StringUtils.isNotBlank(model.getPatientName()), AidRecordDO::getPatientName, model.getPatientName())
+                .eq(Objects.nonNull(model.getPatientPhone()), AidRecordDO::getPatientPhone, model.getPatientPhone())
+                .eq(Objects.nonNull(model.getCreatedDate()), AidRecordDO::getCreatedDate, model.getCreatedDate());
         Page<AidRecordDO> result = AidRecordMapper.selectPage(aidRecordPage, wrapper);
 
         if (Objects.isNull(result) || CollectionUtils.isEmpty(result.getRecords())) {
@@ -83,7 +89,7 @@ public class AidRecordController {
      *
      * @return 单条数据
      */
-    
+
     @ApiOperation(value = "根据id查询", notes = "根据id查询", response = AidRecordDTO.class)
     @ApiImplicitParam(name = "request", value = "分页查询", required = true,
             paramType = "body", dataType = "Request«Long»")
@@ -102,7 +108,7 @@ public class AidRecordController {
      * @param aidRecordDTO 实体对象
      * @return 新增结果
      */
-    
+
     @ApiOperation(value = "新增", notes = "新增", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "新增", required = true,
             paramType = "body", dataType = "Request«AidRecordParam»")
@@ -116,7 +122,7 @@ public class AidRecordController {
      *
      * @return 修改结果
      */
-    
+
     @ApiOperation(value = "更新", notes = "更新", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "更新", required = true,
             paramType = "body", dataType = "Request«AidRecordParam»")
@@ -130,7 +136,7 @@ public class AidRecordController {
      *
      * @return 删除结果
      */
-    
+
     @ApiOperation(value = "删除结果", notes = "删除结果", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "删除结果", required = true,
             paramType = "body", dataType = "Request«List<Long>»")

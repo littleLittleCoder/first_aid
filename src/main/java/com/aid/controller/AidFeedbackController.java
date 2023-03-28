@@ -5,6 +5,7 @@ import com.aid.dto.*;
 import com.aid.entity.AidFeedbackDO;
 import com.aid.mapper.AidFeedbackMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -51,11 +52,16 @@ public class AidFeedbackController {
             return Response.successResponse(aidRecordResponseList);
         }
 
+        AidFeedbackDTO model = aidFeedback.getModel();
         Page<AidFeedbackDO> aidFeedbackPage = new Page<>();
-        aidFeedbackPage.setCurrent(aidFeedback.getModel().getPage());
-        aidFeedbackPage.setSize(aidFeedback.getModel().getSize());
+        aidFeedbackPage.setCurrent(model.getPage());
+        aidFeedbackPage.setSize(model.getSize());
 
         QueryWrapper<AidFeedbackDO> wrapper = new QueryWrapper<>();
+        wrapper.lambda()
+                .eq(StringUtils.isNotBlank(model.getHospitalName()), AidFeedbackDO::getHospitalName, model.getHospitalName())
+                .eq(StringUtils.isNotBlank(model.getPatientName()), AidFeedbackDO::getPatientName, model.getPatientName())
+                .eq(StringUtils.isNotBlank(model.getPatientName()), AidFeedbackDO::getHospitalName, model.getPatientName());
         Page<AidFeedbackDO> result = aidFeedbackMapper.selectPage(aidFeedbackPage, wrapper);
 
         if (Objects.isNull(result) || CollectionUtils.isEmpty(result.getRecords())) {

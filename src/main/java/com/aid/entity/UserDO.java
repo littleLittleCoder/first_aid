@@ -32,4 +32,10 @@ public class UserDO {
 
     private Boolean isActive;
 
+    private String phone;
+
+    private String passWorld;
+
+    private Integer identity;
+
 }
