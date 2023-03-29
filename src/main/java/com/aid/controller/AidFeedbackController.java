@@ -39,10 +39,11 @@ public class AidFeedbackController {
 
     /**
      * 分页查询所有数据
+     *
      * @return 所有数据
      */
-    
-    @ApiOperation(value = "分页查询", notes = "分页查询", response = AidFeedbackDTO.class,responseContainer = "List")
+
+    @ApiOperation(value = "分页查询", notes = "分页查询", response = AidFeedbackDTO.class, responseContainer = "List")
     @ApiImplicitParam(name = "request", value = "分页查询", required = true,
             paramType = "body", dataType = "Request«AidFeedbackDTO»")
     @RequestMapping(value = "/selectPage", method = RequestMethod.POST)
@@ -61,7 +62,7 @@ public class AidFeedbackController {
         wrapper.lambda()
                 .eq(StringUtils.isNotBlank(model.getHospitalName()), AidFeedbackDO::getHospitalName, model.getHospitalName())
                 .eq(StringUtils.isNotBlank(model.getPatientName()), AidFeedbackDO::getPatientName, model.getPatientName())
-                .eq(StringUtils.isNotBlank(model.getPatientName()), AidFeedbackDO::getHospitalName, model.getPatientName());
+                .eq(model.getRecordId() != null, AidFeedbackDO::getRecordId, model.getRecordId());
         Page<AidFeedbackDO> result = aidFeedbackMapper.selectPage(aidFeedbackPage, wrapper);
 
         if (Objects.isNull(result) || CollectionUtils.isEmpty(result.getRecords())) {
@@ -84,7 +85,7 @@ public class AidFeedbackController {
      *
      * @return 单条数据
      */
-    
+
     @ApiOperation(value = "根据id查询", notes = "根据id查询", response = AidFeedbackDTO.class)
     @ApiImplicitParam(name = "request", value = "分页查询", required = true,
             paramType = "body", dataType = "Request«Long»")
@@ -98,7 +99,7 @@ public class AidFeedbackController {
      *
      * @return 新增结果
      */
-    
+
     @ApiOperation(value = "新增", notes = "新增", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "新增", required = true,
             paramType = "body", dataType = "Request«AidFeedbackDTO»")
@@ -112,7 +113,7 @@ public class AidFeedbackController {
      *
      * @return 修改结果
      */
-    
+
     @ApiOperation(value = "更新", notes = "更新", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "更新", required = true,
             paramType = "body", dataType = "Request«AidFeedbackDTO»")
@@ -126,7 +127,7 @@ public class AidFeedbackController {
      *
      * @return 删除结果
      */
-    
+
     @ApiOperation(value = "删除结果", notes = "删除结果", response = Boolean.class)
     @ApiImplicitParam(name = "request", value = "删除结果", required = true,
             paramType = "body", dataType = "Request«List<Long>»")

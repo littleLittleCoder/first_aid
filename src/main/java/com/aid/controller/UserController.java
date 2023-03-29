@@ -115,4 +115,16 @@ public class UserController {
         return Response.successResponse(userMapper.insert(param.getModel()) > 0);
     }
 
+
+    @ApiOperation(value = "更新用户", notes = "更新用户", response = Boolean.class)
+    @ApiImplicitParam(name = "request", value = "更新用户", required = true,
+            paramType = "body", dataType = "Request«Boolean»")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Response<Boolean> update(@RequestBody Request<UserDO> param) {
+        if (param == null || param.getModel() == null) {
+            return Response.errorResponse("参数为空");
+        }
+        return Response.successResponse(userMapper.updateById(param.getModel()) > 0);
+    }
+
 }

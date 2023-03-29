@@ -30,7 +30,7 @@ public class UserDO {
 
     private String sex;
 
-    private Boolean isActive;
+    private Boolean isActive = true;
 
     private String phone;
 

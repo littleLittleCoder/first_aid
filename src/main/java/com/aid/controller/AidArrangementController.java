@@ -9,6 +9,7 @@ import com.aid.mapper.AidRecordMapper;
 import com.aid.param.AidArrangementParam;
 import com.aid.transfer.AidRecordTransfer;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -68,6 +69,9 @@ public class AidArrangementController extends ApiController {
         aidArrangementPage.setSize(model.getSize());
 
         QueryWrapper<AidArrangementDO> wrapper = new QueryWrapper<>();
+        wrapper.lambda()
+                .eq(StringUtils.isNotBlank(model.getAmbulanceNo()), AidArrangementDO::getAmbulanceNo, model.getAmbulanceNo())
+                .eq(model.getRecordId() != null , AidArrangementDO::getRecordId, model.getRecordId());
 
         Page<AidArrangementDO> result = aidArrangementService.selectPage(aidArrangementPage, wrapper);
 
